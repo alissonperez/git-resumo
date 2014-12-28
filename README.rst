@@ -127,7 +127,7 @@ Pode-se passar o argumento ``-v`` para que o diff das alterações seja adiciona
 
     $ git commit -v
 
-Removendo arquivos do git
+Removendo arquivos do Git
 ----------------------------
 
 Use o comando ``git rm`` para remover o arquivo do controle de versão.
@@ -296,7 +296,49 @@ E o nosso histórico de commits será::
 
 Branches são extremamente baratos, internamente são apenas arquivos com 41 bytes (40 caracteres e uma quebra de linha). Dessa forma, podemos usar branches para qualquer desenvolvimento novo, por mais simples que seja, e trabalharmos nos branches principais apenas efetuando *merges*.
 
-.. _repositorios-remotos:
+Merge entre branches "divergentes"
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Em um ambientes com mais colaboradores, branches podem seguir caminhos distintos com muita facilidade e em algum momento futuro precisaremos juntá-los. Para demonstrar como isso é feito, vamos voltar a um exemplo mostrado anteriormente::
+
+              master
+                |
+    D---E---F---G---H
+                    |
+                  bug42
+
+Vamos supor agora que o branch master recebe um novo commit. A situação seria a seguinte::
+
+                  master
+                    |
+    D---E---F---G---I
+                 \
+                  --H
+                    |
+                  bug42
+
+Note que o branch master "andou" para o commit **I** enquanto nosso branch **bug42** está apontando para o commit **H** e não possui as alterações feitas no commit **I** do branch master. Neste momento os dois branches estão divergentes e será necessário um novo commit para juntar os dois (ao fazer o *merge*).
+
+Após terminarmos nossas alterações no branch bug42 e efetuarmos os testes necessários queremos juntá-las ao branch master. Como vimos anteriormente, vamos utilizar o comando ``git merge``::
+
+    $ git checkout master
+    $ git merge bug42
+
+Agora o histórico de commits será o seguinte::
+
+                      master
+                        |
+    D---E---F---G---I---J
+                 \     /
+                  --H--
+                    |
+                  bug42
+
+Veja que o comando merge criou o commit **J** para juntar os dois branches com as alterações que estavam presentes em cada um (commit **I** e commit **H**).
+
+É importante notar que, caso haja algum conflito (edições na mesma linha de um arquivo em ambos os branches, por exemplo), pode ser que o Git informe do conflito e solicite que este seja corrigido manualmente caso ele não consiga resolve-los automaticamente.
+
+Mais adiante veremos uma outra forma de tratar divergências entre branchs utilizando o comando ``rebase``.
 
 Repositórios remotos (remotes)
 ---------------------------------------------
