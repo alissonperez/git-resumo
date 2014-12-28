@@ -3,6 +3,7 @@ GIT - Resumo
 
 *... EM DESENVOLVIMENTO*
 
+Feito com base no estudo da documentação do site oficial: http://git-scm.com/book/en/v2/Getting-Started-About-Version-Control
 
 Configuração
 --------------
