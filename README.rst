@@ -1,8 +1,8 @@
 GIT - Resumo
 =============
 
-.. toctree::
-   :maxdepth: 2
+*... EM DESENVOLVIMENTO*
+
 
 Configuração
 --------------
