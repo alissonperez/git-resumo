@@ -3,8 +3,6 @@ GIT - Resumo
 
 *... EM DESENVOLVIMENTO*
 
-Feito com base no estudo da documentação do site oficial: http://git-scm.com/book/en/v2/Getting-Started-About-Version-Control
-
 Configuração
 --------------
 
@@ -17,6 +15,61 @@ Para configurar o editor padrão para mensagens de commit::
 
     $ git config --global core.editor emacs
 
+Caso queira verificar suas configurações atuais, utilize o parâmetro ``--list``::
+
+    $ git config --list
+    user.name=John Doe
+    user.email=johndoe@example.com
+    color.status=auto
+    color.branch=auto
+    color.interactive=auto
+    color.diff=auto
+    ...
+
+
+Utilizando a ajuda
+---------------------------
+
+Utilize o parâmetro --help para consultar a documentação de uso de um determinado comando. Exemplo::
+
+    $ git diff --help
+
+O comando acima mostra a ajuda para o comando ``git diff``.
+
+Iniciando repositórios
+-----------------------
+
+Para iniciar um repositório usamos o comando ``git init``. Ele ciará o subdiretório *.git* e deixará tudo pronto para adição dos arquivos.
+
+Em seguida, precisamos incluir os arquivos que queremos que seja controlado pelo Git. Para isso, utilizamos o comando ``git add``. Exemplo::
+
+    $ git add *.php
+    $ git add LICENSE
+
+O comando acima adiciona todos os arquivos *.php* presentes no diretório atual e o arquivo LICENSE ao Git. Feito isso eles estão em *staging* (veremos mais sobre em **Adicionando alterações para commit**) e prontos para commit::
+
+    $ git commit -m "Primeiro commit"
+
+O comando acima irá consolidar os arquivos adicionados em *staging* para o controle de versão do Git com a mensagem "Primeiro commit".
+
+Ate o momento, seu repositório, commits e arquivos sob controle de versão estão apenas locais, nenhuma comunicação de rede foi feita. Para enviar para um repositório "cental", utilizamos o comando ``git push``, porém antes é necessário configurar um *remote* para isso. Exemplo::
+
+    $ git remote add origin git@github.com:alissonperez/git-resumo.git
+
+Agora temos um repositório remoto apontando para o Github. Podemos efetuar o *push* com nossas alterações::
+
+    $ git push -u origin master
+
+Isso fará com que o nosso commit feito anteriormente sejá enviado para o Github. É possível trabalhar com vários repositórios remotos devido ao Git trabalhar de forma distribuida, veja mais sobre em **Repositórios remotos (remotes)**.
+
+Baixando repositórios
+----------------------
+
+Utilize o comando ``git clone [URL/Caminho do repositório]`` para baixar localmente todo o repositório remoto. Exemplo::
+
+    $ git clone git@github.com:alissonperez/git-resumo.git
+
+O comando acima irá baixar o repositório todo desta documentação dentro do diretório *git-resumo*. Você estará pronto para alterar arquivos, adicionar para commit (em *staging*) e efetuar seus *commits* e *pushes*.
 
 Verificando diferenças
 --------------------------
@@ -40,7 +93,28 @@ Adicionando alterações para commit
 
 Após efetuar as alterações, execute o comando ``git status`` para verificar o que está em *staging* (para ir no próximo commit) e o que esta no *working directory*.
 
-Para adicionar arquivos alterados no próximo commit, use o comando ``git add``.
+Para adicionar arquivos alterados no próximo commit, use o comando ``git add``. Exemplo::
+
+    $ git status
+    On branch master
+    Untracked files:
+      (use "git add <file>..." to include in what will be committed)
+
+        README
+
+    nothing added to commit but untracked files present (use "git add" to track)
+
+    $ git add README
+    $ git status
+    On branch master
+    Changes to be committed:
+      (use "git reset HEAD <file>..." to unstage)
+
+        new file:   README
+
+No comando acima, após executar o comando ``git status`` verificamos que o arquivo README estava foram do *staging* (em *untracked files*). Executamos em seguida o comando ``git add README`` para adicionar o arquivo em *staging*. Podemos ver que o arquivo está pronto para commit com o último commando ``git status``, onde o README aparece em *staging*.
+
+Isso é muito útil quando queremos determinar exatamente o que subir separando os commits por assunto ou funcionalidade, por exemplo.
 
 Comitando alterações
 ---------------------
@@ -50,7 +124,6 @@ Use o comando ``git commit`` para comitar as alterações em *staging*. Será ab
 Pode-se passar o argumento ``-v`` para que o diff das alterações seja adicionado ao editor no momento de informar a mensagem::
 
     $ git commit -v
-
 
 Removendo arquivos do git
 ----------------------------
@@ -144,8 +217,11 @@ use ``git checkout -- [file]`` para desfazer as alterações feitas em determina
 Branches
 ----------------------------
 
+Explicar como é armazenado um commit no git
+
 *TODO*
 
+.. _repositorios-remotos:
 
 Repositórios remotos (remotes)
 ---------------------------------------------
@@ -346,3 +422,9 @@ Caso queira listar o que está na pilha, use o comando ``git stash list``::
     stash@{0}: WIP on master: 049d078 added the index file
     stash@{1}: WIP on master: c264051 Revert "added file_size"
     stash@{2}: WIP on master: 21d80a5 added number to log
+
+
+Referências
+--------------
+
+Feito com base no estudo da documentação do site oficial: http://git-scm.com/book/en/v2/Getting-Started-About-Version-Control
