@@ -147,7 +147,7 @@ Branches
 *TODO*
 
 
-Trabalho com repositórios remotos (remotes)
+Repositórios remotos (remotes)
 ---------------------------------------------
 
 **Remotes** são repositórios remotos onde é feito **pull** (obtenção das alterações) e **push** (envio das alterações). Por exemplo, o *Github* é um repositório remoto onde fazemos pull e push.
