@@ -74,7 +74,7 @@ O comando acima irá baixar o repositório todo desta documentação dentro do d
 Verificando diferenças
 --------------------------
 
-Com o ``git diff`` é possível ver o que está diferente no *working directory* mas não em *staging* para commit::
+Após efetuar alterações, queremos ver o que exatamente foi alterado. Com o ``git diff`` é possível ver o que está diferente no *working directory* mas não em *staging* para commit (veremos sobre *staging* no próximo tópico)::
 
     $ git diff
 
@@ -90,6 +90,8 @@ OBS.: *staged* e *cached* são sinonimos.
 
 Adicionando alterações para commit
 -------------------------------------
+
+No Git há um local intermediário entre o diretório local e o que está "commitado". Isso é chamado de *stage* e apenas arquivos neste local podem ir em um commit (pode-se usar o parâmetro ``-a`` ao commitar para pular este local e enviar no commit todos os arquivos alterados, veremos adiante).
 
 Após efetuar as alterações, execute o comando ``git status`` para verificar o que está em *staging* (para ir no próximo commit) e o que esta no *working directory*.
 
@@ -217,9 +219,82 @@ use ``git checkout -- [file]`` para desfazer as alterações feitas em determina
 Branches
 ----------------------------
 
-Explicar como é armazenado um commit no git
+Há várias formas de uso para *branches*, pode-se dizer que utilizamos basicamente para separar caminhos de desenvolvimento, seja para um novo recurso ou feature, separar ambientes de desenvolvimento e produção (*stable*) ou simplesmente corrigir um bug. No Git branches são extremamente úteis e muito "baratos" de fazer e remover.
 
-*TODO*
+Antes de explicar como funcionam branches, precisamos mostrar como o Git trabalha com *commits*.
+
+Tudo no Git gira em torno dos *commits*. Cada *commit* possui um ponteiro para um snapshot completo do repositório. Onde os arquivos alterados são armazenados por completo e os que não foram alterados são apontados para a versão anterior por meio de um link simbólico.
+
+Com o *commit* também são guardadas algumas informações, como o nome e e-mail do autor, mensagem digitada e um ponteiro para o *commit* feito anteriormente (um ponteiro para *commits* normais, um ou mais ponteiros para *commits* resultantes de merge entre branches, e nenhum ponteiro para o primeiro *commit* do repositório).
+
+A ilustraração que segue demonstra uma sequencia de commits (o mais recente à direita) com os ponteiros para os anteriores (cada letra representa um commit)::
+
+    A---B---C---D
+
+Um *branch* nada mais é que um ponteiro para um determinado *commit* dessa linha::
+
+              master
+                |
+    D---E---F---G
+
+Neste caso, o branch master está apontando para o commit **G**. Podemos agora criar um novo branch chamado **bug42**, com o intuito de resolver um bug encontrado no projeto::
+
+    $ git branch bug42
+
+Com o comando acima, será criado um novo branch (um novo ponteiro apontando para o mesmo commit do branch atual) resultando no seguinte::
+
+              master
+                |
+    D---E---F---G
+                |
+              bug42
+
+Vamos agora trocar para o novo *branch*, para isso utilizamos o comando ``git checkout``::
+
+    $ git checkout bug42
+
+Agora estamos no branch *bug42*, qualquer alteração que fizermos aqui não terá qualquer influência no branch *master*. Vamos então alterar alguns arquivos e fazer um commit::
+
+    $ vim footer.inc.php
+    $ git add footer.inc.php
+    $ git commit -m "Corrigido e-mail no rodapé da aplicação"
+
+Nosso histórico de *commits* agora será::
+
+              master
+                |
+    D---E---F---G---H
+                    |
+                  bug42
+
+Note que o branch *master* se manteve no commit **G** enquanto o branch *bug42* acompanhou o nosso novo *commit* **H**.
+
+Após efetuar os testes necessários, desejamos juntar nossa alteração no branch *master*, para isso, devemos retornar ao branch *master* e utilizar o comando ``git merge``::
+
+    $ git checkout master
+    $ git merge bug42
+
+Resultando em::
+
+                  master
+                    |
+    D---E---F---G---H
+                    |
+                  bug42
+
+Note que o *branch* master apenas avançou para o commit **H**, sendo apontado pelo branch *bug42*. Esse avanço recebe o nome de **fast-forward**, pois não houve nenhuma divergencia na "história" dos branches (isso ocorreria se alguém fizesse um commit no branch master enquanto já comitamos algo no branch *bug42*, veremos mais adiante o que fazemos nessa situação) e foi necessário apenas atualizar o ponteiro do branch master para o commit seguinte.
+
+Agora podemos remover o branch *bug42*::
+
+    $ git branch -d bug42
+
+E o nosso histórico de commits será::
+
+                  master
+                    |
+    D---E---F---G---H
+
+Branches são extremamente baratos, internamente são apenas arquivos com 41 bytes (40 caracteres e uma quebra de linha). Dessa forma, podemos usar branches para qualquer desenvolvimento novo, por mais simples que seja, e trabalharmos nos branches principais apenas efetuando *merges*.
 
 .. _repositorios-remotos:
 
