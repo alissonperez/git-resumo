@@ -27,6 +27,12 @@ Caso queira verificar suas configurações atuais, utilize o parâmetro ``--list
     ...
 
 
+Alias para um log mais "pretty"::
+
+    $ git config --global alias.logp "log --pretty --oneline --graph --all --decorate"
+    $ git logp  # Para usar
+
+
 Utilizando a ajuda
 ---------------------------
 
