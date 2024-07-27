@@ -1,7 +1,8 @@
 GIT - Resumo
 =============
 
-*... EM DESENVOLVIMENTO*
+Migrado para https://alissonperez.com/Notas/IT/Git/Git-Resumo
+--------------------------------------------------------------
 
 Configuração
 --------------
