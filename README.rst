@@ -1,8 +1,12 @@
 GIT - Resumo
 =============
 
+###############
+
 Migrado para https://alissonperez.com/Notas/IT/Git/Git-Resumo
 --------------------------------------------------------------
+
+###############
 
 Configuração
 --------------
